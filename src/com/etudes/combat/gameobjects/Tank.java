@@ -1,6 +1,7 @@
 package com.etudes.combat.gameobjects;
 
 import static java.awt.event.KeyEvent.*;
+import static java.lang.Math.*;
 
 import com.etudes.combat.main.Game;
 import com.etudes.combat.utils.ResourceLoader;
@@ -10,13 +11,18 @@ import java.awt.image.BufferedImage;
 
 public class Tank {
 
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private static final int DIMENSION = 48;
-    private int vx;
-    private int vy;
+    private double vx;
+    private double vy;
     private double angle;
     private double rotVel;
+
+    private boolean movingUp;
+    private boolean movingDown;
+    private boolean rotatingCw;
+    private boolean rotatingCc;
 
     private BufferedImage tankImage;
 
@@ -29,57 +35,96 @@ public class Tank {
         this.tankColor = tankColor;
         this.game = game;
 
+        movingUp = false;
+        movingDown = false;
+        rotatingCw = false;
+        rotatingCc = false;
+
         if(tankColor == Color.BLUE) {
             tankImage = ResourceLoader.loadImage("images/BlueTank.png");
         } else if(tankColor == Color.GREEN) {
             tankImage = ResourceLoader.loadImage("images/GreenTank.png");
         } else tankImage = null;
 
-        vx = 0;
-        vy = 0;
-        angle = 0;
-        rotVel = 0;
+        vx = 0.0;
+        vy = 0.0;
+        angle = 0.0;
+        rotVel = 0.0;
     }
 
     public void update() {
         x += vx;
         y += vy;
         angle += rotVel;
+        if(movingUp || movingDown) {
+            updateVelocity();
+        }
     }
 
     public void render(Graphics g) {
 
         Graphics2D g2 = (Graphics2D) g;
-        double r = Math.toRadians(angle);
-        g2.rotate(r, (DIMENSION / 2) + x, (DIMENSION / 2) + y);
-        g2.drawImage(tankImage, x, y, game);
+        double r = toRadians(angle);
+        g2.rotate(r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
+        g2.drawImage(tankImage, (int) x, (int) y, game);
 
     }
 
     public void keyPressed(int key) {
         if(key == VK_W) {
-            vy = -1;
+            movingUp = true;
+            movingDown = false;
         } else if(key == VK_S) {
-            vy = 1;
+            movingDown = true;
+            movingUp = false;
         } else if(key == VK_D) {
+            rotatingCw = true;
             rotVel = 1;
         } else if(key == VK_A) {
             rotVel = -1;
+            rotatingCc = true;
         }
     }
 
     public void keyReleased(int key) {
-        // these statements make sure another key hasn't been pressed since the key-in-question was
-        // along with regular key release checking
-        if(key == VK_W && vy != 1) {
+        if(key == VK_W && !movingDown) {
+            movingUp = false;
             vy = 0;
-        } else if(key == VK_S && vy != -1) {
+            vx = 0;
+        } else if(key == VK_S && !movingUp) {
+            movingDown = false;
             vy = 0;
-        } else if(key == VK_A && rotVel != 1) {
+            vx = 0;
+        } else if(key == VK_A && !rotatingCw) {
+            rotatingCc = false;
             rotVel = 0;
-        } else if(key == VK_D && rotVel != -1) {
+        } else if(key == VK_D && !rotatingCc) {
             rotVel = 0;
+            rotatingCw = false;
         }
+    }
+
+    public void updateVelocity() {
+
+        if(movingUp) {
+            double r = toRadians(angle);
+            r = -r;
+            r += PI / 2;
+            double cos = cos(r);
+            double sin = sin(r);
+            vx = cos;
+            vy = -sin;
+        }
+        if(movingDown) {
+            double r = toRadians(angle);
+            r = -r;
+            r += PI / 2;
+            double cos = cos(r);
+            double sin = sin(r);
+            vx = -cos;
+            vy = sin;
+        }
+
     }
 
 }

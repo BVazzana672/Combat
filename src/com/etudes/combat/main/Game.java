@@ -23,7 +23,7 @@ public class Game extends Canvas implements Runnable{
         new Window(TITLE, this);
         addKeyListener(new KeyInput(this));
 
-        tank = new Tank(100, 100, Color.BLUE, this);
+        tank = new Tank(100, 100, Color.GREEN, this);
     }
 
     @Override

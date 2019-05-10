@@ -11,13 +11,20 @@ import java.awt.image.BufferedImage;
 
 public class Tank {
 
+    private static final int DIMENSION = 48;
+
     private double x;
     private double y;
-    private static final int DIMENSION = 48;
     private double vx;
     private double vy;
     private double angle;
     private double rotVel;
+
+    private int upKey;
+    private int downKey;
+    private int cwKey;
+    private int ccKey;
+    private int fireKey;
 
     private boolean movingUp;
     private boolean movingDown;
@@ -42,8 +49,18 @@ public class Tank {
 
         if(tankColor == Color.BLUE) {
             tankImage = ResourceLoader.loadImage("images/BlueTank.png");
+            upKey = VK_W;
+            downKey = VK_S;
+            cwKey = VK_D;
+            ccKey = VK_A;
+            fireKey = VK_SPACE;
         } else if(tankColor == Color.GREEN) {
             tankImage = ResourceLoader.loadImage("images/GreenTank.png");
+            upKey = VK_UP;
+            downKey = VK_DOWN;
+            cwKey = VK_RIGHT;
+            ccKey = VK_LEFT;
+            fireKey = VK_ENTER;
         } else tankImage = null;
 
         vx = 0.0;
@@ -71,36 +88,38 @@ public class Tank {
     }
 
     public void keyPressed(int key) {
-        if(key == VK_W) {
+        if(key == upKey) {
             movingUp = true;
             movingDown = false;
-        } else if(key == VK_S) {
+        } else if(key == downKey) {
             movingDown = true;
             movingUp = false;
-        } else if(key == VK_D) {
+        } else if(key == cwKey) {
             rotatingCw = true;
+            rotatingCc = false;
             rotVel = 1;
-        } else if(key == VK_A) {
-            rotVel = -1;
+        } else if(key == ccKey) {
             rotatingCc = true;
+            rotatingCw = false;
+            rotVel = -1;
         }
     }
 
     public void keyReleased(int key) {
-        if(key == VK_W && !movingDown) {
+        if(key == upKey && !movingDown) {
             movingUp = false;
             vy = 0;
             vx = 0;
-        } else if(key == VK_S && !movingUp) {
+        } else if(key == downKey && !movingUp) {
             movingDown = false;
             vy = 0;
             vx = 0;
-        } else if(key == VK_A && !rotatingCw) {
-            rotatingCc = false;
-            rotVel = 0;
-        } else if(key == VK_D && !rotatingCc) {
+        } else if(key == cwKey && !rotatingCc) {
             rotVel = 0;
             rotatingCw = false;
+        } else if(key == ccKey && !rotatingCw) {
+            rotatingCc = false;
+            rotVel = 0;
         }
     }
 

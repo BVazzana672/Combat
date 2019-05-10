@@ -1,10 +1,11 @@
 package com.etudes.combat.gameobjects;
 
+import static java.awt.event.KeyEvent.*;
+
 import com.etudes.combat.main.Game;
 import com.etudes.combat.utils.ResourceLoader;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Tank {
@@ -53,6 +54,32 @@ public class Tank {
         g2.rotate(r, (DIMENSION / 2) + x, (DIMENSION / 2) + y);
         g2.drawImage(tankImage, x, y, game);
 
+    }
+
+    public void keyPressed(int key) {
+        if(key == VK_W) {
+            vy = -1;
+        } else if(key == VK_S) {
+            vy = 1;
+        } else if(key == VK_D) {
+            rotVel = 1;
+        } else if(key == VK_A) {
+            rotVel = -1;
+        }
+    }
+
+    public void keyReleased(int key) {
+        // these statements make sure another key hasn't been pressed since the key-in-question was
+        // along with regular key release checking
+        if(key == VK_W && vy != 1) {
+            vy = 0;
+        } else if(key == VK_S && vy != -1) {
+            vy = 0;
+        } else if(key == VK_A && rotVel != 1) {
+            rotVel = 0;
+        } else if(key == VK_D && rotVel != -1) {
+            rotVel = 0;
+        }
     }
 
 }

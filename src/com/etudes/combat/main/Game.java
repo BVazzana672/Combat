@@ -1,6 +1,7 @@
 package com.etudes.combat.main;
 
 import com.etudes.combat.gameobjects.Tank;
+import com.etudes.combat.input.KeyInput;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -20,6 +21,7 @@ public class Game extends Canvas implements Runnable{
         running = false;
         setSize(new Dimension(WIDTH, HEIGHT));
         new Window(TITLE, this);
+        addKeyListener(new KeyInput(this));
 
         tank = new Tank(100, 100, Color.BLUE, this);
     }
@@ -93,6 +95,14 @@ public class Game extends Canvas implements Runnable{
         } catch(InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void keyPressed(int key) {
+        tank.keyPressed(key);
+    }
+
+    public void keyReleased(int key) {
+        tank.keyReleased(key);
     }
 
     public static void main(String[] args) {

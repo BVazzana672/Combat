@@ -1,5 +1,7 @@
 package com.etudes.combat.main;
 
+import com.etudes.combat.gameobjects.Tank;
+
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
@@ -12,10 +14,14 @@ public class Game extends Canvas implements Runnable{
     private boolean running;
     private Thread thread;
 
+    private Tank tank;
+
     public Game() {
         running = false;
         setSize(new Dimension(WIDTH, HEIGHT));
         new Window(TITLE, this);
+
+        tank = new Tank(100, 100, Color.BLUE, this);
     }
 
     @Override
@@ -52,6 +58,8 @@ public class Game extends Canvas implements Runnable{
 
     public void update() {
 
+        tank.update();
+
     }
 
     public void render() {
@@ -65,6 +73,8 @@ public class Game extends Canvas implements Runnable{
 
         g.setColor(Color.PINK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
+
+        tank.render(g);
 
         g.dispose();
         bs.show();

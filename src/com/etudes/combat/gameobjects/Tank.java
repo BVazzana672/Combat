@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 
 public class Tank {
 
-    private static final int DIMENSION = 48;
+    public static final int DIMENSION = 48;
 
     private double x;
     private double y;
@@ -59,6 +59,7 @@ public class Tank {
             cwKey = VK_D;
             ccKey = VK_A;
             fireKey = VK_SPACE;
+            angle = 90;
         } else if(tankColor == Color.GREEN) {
             tankImage = ResourceLoader.loadImage("images/GreenTank.png");
             upKey = VK_UP;
@@ -66,11 +67,11 @@ public class Tank {
             cwKey = VK_RIGHT;
             ccKey = VK_LEFT;
             fireKey = VK_ENTER;
+            angle = -90;
         } else tankImage = null;
 
         vx = 0.0;
         vy = 0.0;
-        angle = 0.0;
         rotVel = 0.0;
     }
 

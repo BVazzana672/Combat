@@ -1,5 +1,6 @@
 package com.etudes.combat.main;
 
+import com.etudes.combat.gameobjects.Map;
 import com.etudes.combat.gameobjects.Tank;
 import com.etudes.combat.input.KeyInput;
 
@@ -18,14 +19,19 @@ public class Game extends Canvas implements Runnable{
     private Tank blueTank;
     private Tank greenTank;
 
+    private Map map;
+
     public Game() {
         running = false;
         setSize(new Dimension(WIDTH, HEIGHT));
         new Window(TITLE, this);
         addKeyListener(new KeyInput(this));
 
-        blueTank = new Tank(100, 300, Color.BLUE, this);
-        greenTank = new Tank(1000, 300, Color.GREEN, this);
+        int tankY = (HEIGHT / 2) - (Tank.DIMENSION / 2) + 30;
+        blueTank = new Tank(60, tankY, Color.BLUE, this);
+        greenTank = new Tank(WIDTH - 60 - Tank.DIMENSION, tankY, Color.GREEN, this);
+
+        map = new Map(this);
     }
 
     @Override
@@ -90,6 +96,10 @@ public class Game extends Canvas implements Runnable{
 
         greenTank.render(g);
         blueTank.render(g);
+
+        g.setColor(Color.YELLOW);
+
+        map.render(g);
 
         g.dispose();
         bs.show();

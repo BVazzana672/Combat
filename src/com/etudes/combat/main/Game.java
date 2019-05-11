@@ -15,7 +15,8 @@ public class Game extends Canvas implements Runnable{
     private boolean running;
     private Thread thread;
 
-    private Tank tank;
+    private Tank blueTank;
+    private Tank greenTank;
 
     public Game() {
         running = false;
@@ -23,7 +24,8 @@ public class Game extends Canvas implements Runnable{
         new Window(TITLE, this);
         addKeyListener(new KeyInput(this));
 
-        tank = new Tank(100, 100, Color.GREEN, this);
+        blueTank = new Tank(100, 300, Color.BLUE, this);
+        greenTank = new Tank(1000, 300, Color.GREEN, this);
     }
 
     @Override
@@ -59,9 +61,8 @@ public class Game extends Canvas implements Runnable{
     }
 
     public void update() {
-
-        tank.update();
-
+        greenTank.update();
+        blueTank.update();
     }
 
     public void render() {
@@ -76,7 +77,8 @@ public class Game extends Canvas implements Runnable{
         g.setColor(Color.PINK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        tank.render(g);
+        greenTank.render(g);
+        blueTank.render(g);
 
         g.dispose();
         bs.show();
@@ -98,11 +100,13 @@ public class Game extends Canvas implements Runnable{
     }
 
     public void keyPressed(int key) {
-        tank.keyPressed(key);
+        blueTank.keyPressed(key);
+        greenTank.keyPressed(key);
     }
 
     public void keyReleased(int key) {
-        tank.keyReleased(key);
+        blueTank.keyReleased(key);
+        greenTank.keyReleased(key);
     }
 
     public static void main(String[] args) {

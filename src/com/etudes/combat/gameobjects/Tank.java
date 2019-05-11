@@ -84,6 +84,7 @@ public class Tank {
         double r = toRadians(angle);
         g2.rotate(r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
         g2.drawImage(tankImage, (int) x, (int) y, game);
+        g2.rotate(-r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
 
     }
 

@@ -61,6 +61,10 @@ class Bullet {
         y += vy;
     }
 
+    Rectangle getBounds() {
+        return new Rectangle((int)x, (int)y, (int)(RADIUS * 2), (int)(RADIUS * 2));
+    }
+
     void render(Graphics g) {
         g.setColor(bulletColor);
         g.fillArc((int) x, (int) y, (int) RADIUS * 2, (int) RADIUS * 2, 0, 360);

@@ -52,7 +52,7 @@ public class Game extends Canvas implements Runnable{
             }
 
             if(System.currentTimeMillis() - timer >= 1000) {
-                System.out.println("[FPS] " + frames);
+                //System.out.println("[FPS] " + frames);
                 frames = 0;
                 timer += 1000;
             }
@@ -61,8 +61,19 @@ public class Game extends Canvas implements Runnable{
     }
 
     public void update() {
+
         greenTank.update();
         blueTank.update();
+
+        if(greenTank.checkBulletCollision(blueTank)) {
+            greenTank.destroyBullet();
+            blueTank.destroy();
+        }
+        if(blueTank.checkBulletCollision(greenTank)) {
+            blueTank.destroyBullet();
+            greenTank.destroy();
+        }
+
     }
 
     public void render() {

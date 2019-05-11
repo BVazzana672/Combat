@@ -30,6 +30,7 @@ public class Tank {
     private boolean movingDown;
     private boolean rotatingCw;
     private boolean rotatingCc;
+    private boolean destroyed;
 
     private BufferedImage tankImage;
 
@@ -47,6 +48,7 @@ public class Tank {
         movingDown = false;
         rotatingCw = false;
         rotatingCc = false;
+        destroyed = false;
 
         bullet = null;
 
@@ -73,33 +75,37 @@ public class Tank {
     }
 
     public void update() {
-        x += vx;
-        y += vy;
-        angle += rotVel;
-        if(movingUp || movingDown) {
-            updateVelocity();
+        if(!destroyed) {
+            x += vx;
+            y += vy;
+            angle += rotVel;
+            if (movingUp || movingDown) {
+                updateVelocity();
+            }
+
+            if (bullet != null) bullet.update();
+
+            // collision code
+            double right = x + DIMENSION;
+            double bottom = y + DIMENSION;
+            if (x < 0) x = 0;
+            if (y < 0) y = 0;
+            if (right > game.getWidth()) x = game.getWidth() - DIMENSION;
+            if (bottom > game.getHeight()) y = game.getHeight() - DIMENSION;
         }
-
-        if(bullet != null) bullet.update();
-
-        // collision code
-        double right = x + DIMENSION;
-        double bottom = y + DIMENSION;
-        if(x < 0) x = 0;
-        if(y < 0) y = 0;
-        if(right > game.getWidth()) x = game.getWidth() - DIMENSION;
-        if(bottom > game.getHeight()) y = game.getHeight() - DIMENSION;
     }
 
     public void render(Graphics g) {
 
-        Graphics2D g2 = (Graphics2D) g;
-        double r = toRadians(angle);
-        g2.rotate(r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
-        g2.drawImage(tankImage, (int) x, (int) y, game);
-        g2.rotate(-r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
+        if(!destroyed) {
+            Graphics2D g2 = (Graphics2D) g;
+            double r = toRadians(angle);
+            g2.rotate(r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
+            g2.drawImage(tankImage, (int) x, (int) y, game);
+            g2.rotate(-r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
 
-        if(bullet != null) bullet.render(g);
+            if (bullet != null) bullet.render(g);
+        }
 
     }
 
@@ -131,6 +137,24 @@ public class Tank {
 
     public void destroyBullet() {
         bullet = null;
+    }
+
+    public boolean checkBulletCollision(Tank tank) {
+        if(bullet == null) {
+            return false;
+        } else {
+            Rectangle tankRect = tank.getBounds();
+            Rectangle bulletBounds = bullet.getBounds();
+            return tankRect.intersects(bulletBounds);
+        }
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle((int) x, (int) y, DIMENSION, DIMENSION);
+    }
+
+    public void destroy() {
+        destroyed = true;
     }
 
     public void keyReleased(int key) {

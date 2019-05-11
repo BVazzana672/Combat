@@ -35,6 +35,7 @@ public class Tank {
 
     private Game game;
     private Color tankColor;
+    private Bullet bullet;
 
     public Tank(int x, int y, Color tankColor, Game game) {
         this.x = x;
@@ -46,6 +47,8 @@ public class Tank {
         movingDown = false;
         rotatingCw = false;
         rotatingCc = false;
+
+        bullet = null;
 
         if(tankColor == Color.BLUE) {
             tankImage = ResourceLoader.loadImage("images/BlueTank.png");
@@ -77,6 +80,8 @@ public class Tank {
             updateVelocity();
         }
 
+        if(bullet != null) bullet.update();
+
         // collision code
         double right = x + DIMENSION;
         double bottom = y + DIMENSION;
@@ -93,6 +98,8 @@ public class Tank {
         g2.rotate(r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
         g2.drawImage(tankImage, (int) x, (int) y, game);
         g2.rotate(-r, (DIMENSION / 2.0) + x, (DIMENSION / 2.0) + y);
+
+        if(bullet != null) bullet.render(g);
 
     }
 
@@ -111,7 +118,19 @@ public class Tank {
             rotatingCc = true;
             rotatingCw = false;
             rotVel = -1;
+        } else if(key == fireKey) {
+            // bunch of complicated math stuff to get bullet to spawn in the middle of the tank
+            double r = toRadians(angle);
+            double bx = (x + (DIMENSION / 2.0) - Bullet.RADIUS) + cos(r);
+            double by = (y + (DIMENSION / 2.0) - Bullet.RADIUS) + sin(r);
+            double bvx = 3 * (sin(r));
+            double bvy = 3 * (-cos(r));
+            bullet = new Bullet(bx, by, bvx, bvy, tankColor, this, game);
         }
+    }
+
+    public void destroyBullet() {
+        bullet = null;
     }
 
     public void keyReleased(int key) {

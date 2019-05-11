@@ -76,6 +76,14 @@ public class Tank {
         if(movingUp || movingDown) {
             updateVelocity();
         }
+
+        // collision code
+        double right = x + DIMENSION;
+        double bottom = y + DIMENSION;
+        if(x < 0) x = 0;
+        if(y < 0) y = 0;
+        if(right > game.getWidth()) x = game.getWidth() - DIMENSION;
+        if(bottom > game.getHeight()) y = game.getHeight() - DIMENSION;
     }
 
     public void render(Graphics g) {

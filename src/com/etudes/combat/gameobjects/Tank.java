@@ -26,6 +26,7 @@ public class Tank {
     private int cwKey;
     private int ccKey;
     private int fireKey;
+    private int score;
 
     private boolean movingUp;
     private boolean movingDown;
@@ -54,6 +55,8 @@ public class Tank {
         destroyed = false;
 
         bullet = null;
+
+        score = 0;
 
         if(tankColor == Color.BLUE) {
             tankImage = ResourceLoader.loadImage("images/BlueTank.png");
@@ -188,6 +191,13 @@ public class Tank {
         destroyed = true;
     }
 
+    public void respawn(int x, int y, int angle) {
+        destroyed = false;
+        this.x = x;
+        this.y = y;
+        this.angle = angle;
+    }
+
     public void keyReleased(int key) {
         if(key == upKey && !movingDown) {
             movingUp = false;
@@ -227,6 +237,14 @@ public class Tank {
             vy = sin;
         }
 
+    }
+
+    public String getScoreString() {
+        return "" + score;
+    }
+
+    public void addScore() {
+        score += 1;
     }
 
 }

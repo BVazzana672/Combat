@@ -78,10 +78,16 @@ public class Game extends Canvas implements Runnable{
         if(greenTank.checkBulletCollision(blueTank)) {
             greenTank.destroyBullet();
             blueTank.destroy();
+            greenTank.addScore();
+            int tankY = (HEIGHT / 2) - (Tank.DIMENSION / 2) + 30;
+            blueTank.respawn(60, tankY, 90);
         }
         if(blueTank.checkBulletCollision(greenTank)) {
             blueTank.destroyBullet();
             greenTank.destroy();
+            blueTank.addScore();
+            int tankY = (HEIGHT / 2) - (Tank.DIMENSION / 2) + 30;
+            greenTank.respawn(WIDTH - 60 - Tank.DIMENSION, tankY, -90);
         }
 
     }
@@ -100,6 +106,13 @@ public class Game extends Canvas implements Runnable{
 
         greenTank.render(g);
         blueTank.render(g);
+
+        // draw scores
+        g.setColor(Color.BLUE);
+        g.setFont(new Font("Veradana", Font.PLAIN, 50));
+        g.drawString(blueTank.getScoreString(), 30, 50);
+        g.setColor(Color.GREEN);
+        g.drawString(greenTank.getScoreString(), WIDTH - 60, 50);
 
         g.setColor(Color.YELLOW);
 
@@ -132,6 +145,14 @@ public class Game extends Canvas implements Runnable{
     public void keyReleased(int key) {
         blueTank.keyReleased(key);
         greenTank.keyReleased(key);
+    }
+
+    public void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

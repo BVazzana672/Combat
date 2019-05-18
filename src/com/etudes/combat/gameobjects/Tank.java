@@ -142,8 +142,9 @@ public class Tank {
     }
 
     public boolean checkBulletCollision(Tank tank) {
+        // uses the called tank's bullet and checks its collision with the tank passed in
         if(bullet == null) {
-            return false;
+            return false; // can't collide if there's no bullet
         } else {
             Shape tankShape = tank.getBounds();
             Rectangle bulletBounds = bullet.getBounds();
@@ -151,12 +152,34 @@ public class Tank {
         }
     }
 
+    public boolean checkMapCollision(Map map) {
+        // change position to check the next tick's collision
+        x += vx;
+        y += vy;
+        angle += rotVel;
+        Shape shape = getBounds();
+        // goes through each rectangle in the map and checks collision
+        for(Rectangle rect : map.getPieces()) {
+            if(shape.intersects(rect)) {
+                // undo position change since it was read-only
+                x -= vx;
+                y -= vy;
+                angle -= rotVel;
+                return true;
+            }
+        }
+        x -= vx;
+        y -= vy;
+        angle -= rotVel;
+        return false;
+    }
+
     public Shape getBounds() {
         AffineTransform at = new AffineTransform();
-        at.rotate(angle, x + (DIMENSION / 2.0), y + (DIMENSION / 2.0));
+        at.rotate(toRadians(angle), x + (DIMENSION / 2.0), y + (DIMENSION / 2.0));
+
         Rectangle rect = new Rectangle((int) x, (int) y, DIMENSION, DIMENSION);
-        Shape shape = at.createTransformedShape(rect);
-        return shape;
+        return at.createTransformedShape(rect); // create shape based on rect with rotations set in the affinetransform
     }
 
     public void destroy() {

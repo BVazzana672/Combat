@@ -56,6 +56,10 @@ public class Map {
 
     }
 
+    public Rectangle[] getPieces() {
+        return pieces;
+    }
+
     public void render(Graphics g) {
         for(Rectangle piece : pieces) {
             g.setColor(Color.YELLOW);

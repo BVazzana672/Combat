@@ -68,8 +68,12 @@ public class Game extends Canvas implements Runnable{
 
     public void update() {
 
-        greenTank.update();
-        blueTank.update();
+        if(!greenTank.checkMapCollision(map)) { // if no collisions happened
+            greenTank.update();
+        }
+        if(!blueTank.checkMapCollision(map)) {
+            blueTank.update();
+        }
 
         if(greenTank.checkBulletCollision(blueTank)) {
             greenTank.destroyBullet();

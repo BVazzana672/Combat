@@ -38,12 +38,14 @@ public class Tank {
     private Game game;
     private Color tankColor;
     private Bullet bullet;
+    private Map map;
 
-    public Tank(int x, int y, Color tankColor, Game game) {
+    public Tank(int x, int y, Color tankColor, Map map, Game game) {
         this.x = x;
         this.y = y;
         this.tankColor = tankColor;
         this.game = game;
+        this.map = map;
 
         movingUp = false;
         movingDown = false;
@@ -131,9 +133,9 @@ public class Tank {
             double r = toRadians(angle);
             double bx = (x + (DIMENSION / 2.0) - Bullet.RADIUS) + cos(r);
             double by = (y + (DIMENSION / 2.0) - Bullet.RADIUS) + sin(r);
-            double bvx = 3 * (sin(r));
-            double bvy = 3 * (-cos(r));
-            bullet = new Bullet(bx, by, bvx, bvy, tankColor, this, game);
+            double bvx = 2 * (sin(r));
+            double bvy = 2 * (-cos(r));
+            bullet = new Bullet(bx, by, bvx, bvy, tankColor, this, map, game);
         }
     }
 

@@ -28,10 +28,10 @@ public class Game extends Canvas implements Runnable{
         addKeyListener(new KeyInput(this));
 
         int tankY = (HEIGHT / 2) - (Tank.DIMENSION / 2) + 30;
-        blueTank = new Tank(60, tankY, Color.BLUE, this);
-        greenTank = new Tank(WIDTH - 60 - Tank.DIMENSION, tankY, Color.GREEN, this);
 
         map = new Map(this);
+        blueTank = new Tank(60, tankY, Color.BLUE, map,this);
+        greenTank = new Tank(WIDTH - 60 - Tank.DIMENSION, tankY, Color.GREEN, map,this);
     }
 
     @Override

@@ -18,13 +18,15 @@ class Bullet {
     private Game game;
     private Tank tank;
     private Color bulletColor;
+    private Map map;
 
-    Bullet(double x, double y, double vx, double vy, Color bulletColor, Tank tank, Game game) {
+    Bullet(double x, double y, double vx, double vy, Color bulletColor, Tank tank, Map map, Game game) {
         this.x = x;
         this.y = y;
         this.bulletColor = bulletColor;
         this.tank = tank;
         this.game = game;
+        this.map = map;
         // Getting velocities based on tank direction
         this.vx = 3 * vx;
         this.vy = 3 * vy;
@@ -32,28 +34,28 @@ class Bullet {
 
     void update() {
         // Collision
-        final double right = x + (RADIUS * 2);
-        final double bottom = y + (RADIUS * 2);
-        if(x <= 0) {
-            vx = -vx;
-            x = 0;
-            nCollisions++;
-        } else if(right >= game.getWidth()) {
-            vx = -vx;
-            x = game.getWidth() - (RADIUS * 2);
-            nCollisions++;
-        }
-        if(y <= 0) {
-            vy = -vy;
-            y = 0;
-            nCollisions++;
-        } else if(bottom >= game.getHeight()) {
-            vy = -vy;
-            y = game.getHeight() - (RADIUS * 2);
-            nCollisions++;
+        final int centerX = (int)x + (int)RADIUS;
+        final int centerY = (int)y + (int)RADIUS;
+        for(Rectangle mapRect : map.getPieces()) {
+            final int mapRight = mapRect.x + mapRect.width;
+            final double mapBottom = mapRect.y + mapRect.height;
+
+            if(getBounds().intersects(mapRect)) {
+                // these if statements check for x and y collisions
+
+                // if the center is between the two rectangle sides, it's likely a y collision
+                if (centerX > mapRect.x && centerX < mapRight) {
+                    vy = -vy;
+                }
+                // if the center is between the top and bottom, it's likely an x collision
+                else if (centerY > mapRect.y && centerY < mapBottom) {
+                    vx = -vx;
+                }
+                nCollisions++;
+            }
         }
 
-        if(nCollisions == 5) {
+        if(nCollisions == 10) {
             tank.destroyBullet();
         }
 

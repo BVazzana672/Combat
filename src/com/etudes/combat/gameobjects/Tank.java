@@ -7,6 +7,7 @@ import com.etudes.combat.main.Game;
 import com.etudes.combat.utils.ResourceLoader;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Tank {
@@ -144,14 +145,18 @@ public class Tank {
         if(bullet == null) {
             return false;
         } else {
-            Rectangle tankRect = tank.getBounds();
+            Shape tankShape = tank.getBounds();
             Rectangle bulletBounds = bullet.getBounds();
-            return tankRect.intersects(bulletBounds);
+            return tankShape.intersects(bulletBounds);
         }
     }
 
-    public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, DIMENSION, DIMENSION);
+    public Shape getBounds() {
+        AffineTransform at = new AffineTransform();
+        at.rotate(angle, x + (DIMENSION / 2.0), y + (DIMENSION / 2.0));
+        Rectangle rect = new Rectangle((int) x, (int) y, DIMENSION, DIMENSION);
+        Shape shape = at.createTransformedShape(rect);
+        return shape;
     }
 
     public void destroy() {
@@ -190,7 +195,7 @@ public class Tank {
         if(movingDown) {
             double r = toRadians(angle);
             r = -r;
-            r += PI / 2;
+            r += PI / 2; // pi divided by 2 is 90 degrees in radians
             double cos = cos(r);
             double sin = sin(r);
             vx = -cos;
